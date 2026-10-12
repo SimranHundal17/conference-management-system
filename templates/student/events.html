@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% set title = "Events" %}
+{% block content %}
+<section class="toolbar">
+    <form class="input-group table-search" method="get">
+        <span class="input-group-text"><i class="bi bi-search"></i></span>
+        <input class="form-control" name="q" value="{{ q }}" placeholder="Search events">
+        <button class="btn btn-primary" type="submit">Search</button>
+    </form>
+</section>
+<div class="row g-3">
+    {% for event in rows %}
+    <div class="col-md-6 col-xl-4">
+        <article class="event-card h-100">
+            <div class="d-flex justify-content-between gap-3">
+                <span>{{ event.category_name }}</span>
+                <span>{{ event.status_name }}</span>
+            </div>
+            <h3>{{ event.event_title }}</h3>
+            <p>{{ event.description or "No description available." }}</p>
+            <ul class="mini-list">
+                <li><i class="bi bi-geo-alt"></i> {{ event.venue_name }}</li>
+                <li><i class="bi bi-calendar"></i> {{ event.start_date }} to {{ event.end_date }}</li>
+                <li><i class="bi bi-people"></i> {{ event.max_capacity }} seats</li>
+            </ul>
+            {% if event.is_registered %}
+                <button class="btn btn-outline-secondary w-100" type="button" disabled>Registered</button>
+            {% else %}
+                <form method="post" action="{{ url_for('student.register_event', event_id=event.event_id) }}">
+                    <button class="btn btn-primary w-100" type="submit">Register</button>
+                </form>
+            {% endif %}
+        </article>
+    </div>
+    {% else %}
+    <div class="empty-state"><i class="bi bi-calendar-x"></i><p>No events found.</p></div>
+    {% endfor %}
+</div>
+{% endblock %}

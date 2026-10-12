@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% set title = "Manage Events" %}
+{% block content %}
+<section class="toolbar">
+    <div class="input-group table-search">
+        <span class="input-group-text"><i class="bi bi-search"></i></span>
+        <input class="form-control" data-table-search placeholder="Search events">
+    </div>
+    <a class="btn btn-primary" href="{{ url_for('organizer.create_event') }}"><i class="bi bi-plus-lg"></i> Create Event</a>
+</section>
+<section class="data-panel">
+    <div class="table-responsive">
+        <table class="table align-middle data-table">
+            <thead>
+            <tr>
+                <th>Title</th><th>Category</th><th>Venue</th><th>Dates</th><th>Status</th><th>Fee</th><th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for event in rows %}
+            <tr>
+                <td>{{ event.event_title }}</td>
+                <td>{{ event.category_name }}</td>
+                <td>{{ event.venue_name }}</td>
+                <td>{{ event.start_date }} to {{ event.end_date }}</td>
+                <td><span class="badge text-bg-light">{{ event.status_name }}</span></td>
+                <td>€{{ event.registration_fee }}</td>
+                <td class="text-end">
+                    <a class="btn btn-outline-primary btn-sm" href="{{ url_for('organizer.edit_event', event_id=event.event_id) }}"><i class="bi bi-pencil"></i></a>
+                    <form class="d-inline" method="post" action="{{ url_for('organizer.delete_event', event_id=event.event_id) }}" data-confirm="Delete this event?">
+                        <button class="btn btn-outline-danger btn-sm" type="submit"><i class="bi bi-trash"></i></button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

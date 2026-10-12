@@ -1,0 +1,22 @@
+{% extends "dashboard.html" %}
+{% set title = "Student Dashboard" %}
+{% block dashboard_body %}
+<section class="data-panel mt-4">
+    <div class="section-heading">
+        <h2>Upcoming Events</h2>
+        <a href="{{ url_for('student.events') }}">View all</a>
+    </div>
+    <div class="row g-3">
+        {% for event in upcoming %}
+        <div class="col-md-6 col-xl-4">
+            <article class="event-card">
+                <span>{{ event.venue_name }}</span>
+                <h3>{{ event.event_title }}</h3>
+                <p>{{ event.start_date }} to {{ event.end_date }}</p>
+                <strong>€{{ event.registration_fee }}</strong>
+            </article>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% set title = "Notifications" %}
+{% block content %}
+<section class="toolbar">
+    <div class="input-group table-search">
+        <span class="input-group-text"><i class="bi bi-search"></i></span>
+        <input class="form-control" data-table-search placeholder="Search notifications">
+    </div>
+</section>
+<section class="data-panel">
+    {% if rows %}
+    <div class="table-responsive">
+        <table class="table align-middle data-table">
+            <thead>
+            <tr>
+                <th>Type</th>
+                <th>Message</th>
+                <th>Sent At</th>
+                <th>Read</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for notification in rows %}
+                <tr>
+                    <td>{{ notification.type_name }}</td>
+                    <td>{{ notification.message }}</td>
+                    <td>{{ notification.sent_at }}</td>
+                    <td>{{ "Yes" if notification.is_read else "No" }}</td>
+                    <td class="text-end">
+                        <form class="d-inline" method="post" action="{{ url_for('student.delete_notification', notification_id=notification.notification_id) }}" data-confirm="Delete this notification?">
+                            <button class="btn btn-outline-danger btn-sm" type="submit"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="table-footer">
+        <span data-table-count></span>
+        <div class="btn-group">
+            <button class="btn btn-outline-secondary btn-sm" data-page-prev><i class="bi bi-chevron-left"></i></button>
+            <button class="btn btn-outline-secondary btn-sm" data-page-next><i class="bi bi-chevron-right"></i></button>
+        </div>
+    </div>
+    {% else %}
+        <div class="empty-state">
+            <i class="bi bi-inbox"></i>
+            <p>No records found.</p>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

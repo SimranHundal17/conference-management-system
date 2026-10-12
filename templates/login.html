@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block auth_content %}
+<main class="login-page">
+    <section class="login-panel">
+        <div class="login-copy">
+            <span class="brand-mark">CM</span>
+            <h1>Conference Management System</h1>
+            <p>Conference and event operations, registrations, reports, certificates, and schedules in one dashboard.</p>
+        </div>
+        <form method="post" class="login-card">
+            <h2>Sign in</h2>
+            <label class="form-label" for="username">Username</label>
+            <input class="form-control" id="username" name="username" autocomplete="username" required autofocus>
+            <label class="form-label mt-3" for="password">Password</label>
+            <input class="form-control" id="password" type="password" name="password" autocomplete="current-password" required>
+            <button class="btn btn-primary w-100 mt-4" type="submit">Login</button>
+            <div class="demo-box">
+                <strong>Demo</strong>
+                <span>admin / admin123</span>
+                <span>organizer / organizer123</span>
+                <span>student / student123</span>
+            </div>
+        </form>
+    </section>
+</main>
+{% endblock %}

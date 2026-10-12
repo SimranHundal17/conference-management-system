@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% set title = "Certificates" %}
+{% block content %}
+<section class="form-panel mb-4">
+    <form method="post" class="row g-3 align-items-end">
+        <div class="col-md-6">
+            <label class="form-label">Registration</label>
+            <select class="form-select" name="registration_id" required>
+                {% for registration in registrations %}
+                    <option value="{{ registration.registration_id }}">{{ registration.label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Template</label>
+            <select class="form-select" name="template_id" required>
+                {% for template in templates %}
+                    <option value="{{ template.template_id }}">{{ template.template_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary w-100" type="submit">Generate</button>
+        </div>
+    </form>
+</section>
+{% set show_toolbar = true %}
+{% include "_data_table.html" %}
+{% endblock %}

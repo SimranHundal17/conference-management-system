@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% set title = "User Accounts" %}
+{% block content %}
+<section class="form-panel mb-4">
+    <form method="post" class="row g-3">
+        <div class="col-md-3">
+            <label class="form-label">Role</label>
+            <select class="form-select" name="role" required>
+                <option value="student">Student</option>
+                <option value="organizer">Organizer</option>
+                <option value="admin">Admin</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Username</label>
+            <input class="form-control" name="username" maxlength="50" autocomplete="username" required>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Password</label>
+            <input class="form-control" name="password" type="password" autocomplete="new-password" required>
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+            <button class="btn btn-primary w-100" type="submit">Create Account</button>
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">First Name</label>
+            <input class="form-control" name="first_name" maxlength="50">
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Last Name</label>
+            <input class="form-control" name="last_name" maxlength="50">
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Email</label>
+            <input class="form-control" name="email" type="email" maxlength="255">
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Phone</label>
+            <input class="form-control" name="phone_number" maxlength="20">
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Student Program</label>
+            <select class="form-select" name="program_id">
+                <option value="">Select program</option>
+                {% for program in programs %}
+                    <option value="{{ program.program_id }}">{{ program.label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Date of Birth</label>
+            <input class="form-control" name="date_of_birth" type="date">
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Enrollment Year</label>
+            <input class="form-control" name="enrollment_year" type="number" min="2000" max="2100">
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Organizer Department</label>
+            <select class="form-select" name="department_id">
+                <option value="">Select department</option>
+                {% for department in departments %}
+                    <option value="{{ department.department_id }}">{{ department.department_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Organizer Job Title</label>
+            <input class="form-control" name="job_title" maxlength="100">
+        </div>
+    </form>
+</section>
+<section class="toolbar">
+    <div class="input-group table-search">
+        <span class="input-group-text"><i class="bi bi-search"></i></span>
+        <input class="form-control" data-table-search placeholder="Search accounts">
+    </div>
+</section>
+<section class="data-panel">
+    {% if rows %}
+    <div class="table-responsive">
+        <table class="table align-middle data-table">
+            <thead>
+            <tr>
+                <th>User ID</th>
+                <th>Username</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Last Login</th>
+                <th>Profile</th>
+                <th>Student Email</th>
+                <th>Organizer Email</th>
+                <th>Speaker Email</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for row in rows %}
+            <tr>
+                <td>{{ row.user_id }}</td>
+                <td>{{ row.username }}</td>
+                <td>{{ row.role_name }}</td>
+                <td>
+                    {% if row.account_locked %}
+                        <span class="badge text-bg-danger">Locked</span>
+                    {% else %}
+                        <span class="badge text-bg-success">Active</span>
+                    {% endif %}
+                </td>
+                <td>{{ row.last_login if row.last_login is not none else "-" }}</td>
+                <td>{{ row.profile_name }}</td>
+                <td>{{ row.student_email if row.student_email is not none else "-" }}</td>
+                <td>{{ row.organizer_email if row.organizer_email is not none else "-" }}</td>
+                <td>{{ row.speaker_email if row.speaker_email is not none else "-" }}</td>
+                <td class="text-end text-nowrap">
+                    <form class="d-inline" method="post" action="{{ url_for('admin.toggle_user_account_lock', user_id=row.user_id) }}">
+                        <button class="btn btn-outline-secondary btn-sm" type="submit" title="{{ 'Unlock account' if row.account_locked else 'Lock account' }}">
+                            <i class="bi {{ 'bi-unlock' if row.account_locked else 'bi-lock' }}"></i>
+                        </button>
+                    </form>
+                    <form class="d-inline" method="post" action="{{ url_for('admin.delete_user_account', user_id=row.user_id) }}" data-confirm="Delete this login account? The linked student, organizer, or speaker profile will remain.">
+                        <button class="btn btn-outline-danger btn-sm" type="submit" title="Delete account">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="table-footer">
+        <span data-table-count></span>
+        <div class="btn-group">
+            <button class="btn btn-outline-secondary btn-sm" data-page-prev><i class="bi bi-chevron-left"></i></button>
+            <button class="btn btn-outline-secondary btn-sm" data-page-next><i class="bi bi-chevron-right"></i></button>
+        </div>
+    </div>
+    {% else %}
+        <div class="empty-state">
+            <i class="bi bi-inbox"></i>
+            <p>No records found.</p>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

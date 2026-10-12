@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% set title = "Sessions" %}
+{% block content %}
+<section class="form-panel mb-4">
+    <form method="post" class="row g-3">
+        <div class="col-md-4">
+            <label class="form-label">Event</label>
+            <select class="form-select" name="event_id" required>
+                {% for event in events %}<option value="{{ event.event_id }}">{{ event.event_title }}</option>{% endfor %}
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Room</label>
+            <select class="form-select" name="room_id" required>
+                {% for room in rooms %}<option value="{{ room.room_id }}">{{ room.room_name }}</option>{% endfor %}
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Type</label>
+            <select class="form-select" name="session_type_id" required>
+                {% for type in types %}<option value="{{ type.session_type_id }}">{{ type.type_name }}</option>{% endfor %}
+            </select>
+        </div>
+        <div class="col-md-8">
+            <label class="form-label">Title</label>
+            <input class="form-control" name="title" required>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Max participants</label>
+            <input class="form-control" type="number" name="max_participants" min="1">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Start</label>
+            <input class="form-control" type="datetime-local" name="start_datetime" required>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">End</label>
+            <input class="form-control" type="datetime-local" name="end_datetime" required>
+        </div>
+        <div class="col-12">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" name="description" rows="3"></textarea>
+        </div>
+        <div class="col-12">
+            <button class="btn btn-primary" type="submit"><i class="bi bi-plus-lg"></i> Create Session</button>
+        </div>
+    </form>
+</section>
+<section class="toolbar">
+    <div class="input-group table-search">
+        <span class="input-group-text"><i class="bi bi-search"></i></span>
+        <input class="form-control" data-table-search placeholder="Search sessions">
+    </div>
+</section>
+<section class="data-panel">
+    {% if rows %}
+    <div class="table-responsive">
+        <table class="table align-middle data-table">
+            <thead>
+            <tr>
+                <th>Event</th>
+                <th>Title</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Room</th>
+                <th>Type</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for session_row in rows %}
+                <tr>
+                    <td>{{ session_row.event_title }}</td>
+                    <td>{{ session_row.title }}</td>
+                    <td>{{ session_row.start_datetime }}</td>
+                    <td>{{ session_row.end_datetime }}</td>
+                    <td>{{ session_row.room_name }}</td>
+                    <td>{{ session_row.type_name }}</td>
+                    <td class="text-end">
+                        <form class="d-inline" method="post" action="{{ url_for('organizer.delete_session', session_id=session_row.session_id) }}" data-confirm="Delete this session?">
+                            <button class="btn btn-outline-danger btn-sm" type="submit"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="table-footer">
+        <span data-table-count></span>
+        <div class="btn-group">
+            <button class="btn btn-outline-secondary btn-sm" data-page-prev><i class="bi bi-chevron-left"></i></button>
+            <button class="btn btn-outline-secondary btn-sm" data-page-next><i class="bi bi-chevron-right"></i></button>
+        </div>
+    </div>
+    {% else %}
+        <div class="empty-state">
+            <i class="bi bi-inbox"></i>
+            <p>No records found.</p>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

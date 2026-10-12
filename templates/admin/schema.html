@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="schema-layout">
+    <div class="data-panel">
+        <div class="section-heading">
+            <h2>Database Objects</h2>
+            <span class="text-muted">{{ objects|length }} tables and views</span>
+        </div>
+        <div class="schema-grid">
+            {% for item in objects %}
+            <a class="schema-card" href="{{ url_for('admin.schema_object', name=item.name) }}">
+                <span>{{ item.object_type.replace("BASE TABLE", "Table")|title }}</span>
+                <strong>{{ item.name }}</strong>
+                <p>{{ item.note }}</p>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="data-panel">
+        <div class="section-heading">
+            <h2>Foreign-Key Relationships</h2>
+            <span class="text-muted">{{ relationships|length }} links</span>
+        </div>
+        <div class="table-responsive">
+            <table class="table align-middle data-table">
+                <thead>
+                <tr>
+                    <th>Child Table</th>
+                    <th>Column</th>
+                    <th>Parent Table</th>
+                    <th>Parent Column</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for rel in relationships %}
+                <tr>
+                    <td><a href="{{ url_for('admin.schema_object', name=rel.child_table) }}">{{ rel.child_table }}</a></td>
+                    <td>{{ rel.child_column }}</td>
+                    <td><a href="{{ url_for('admin.schema_object', name=rel.parent_table) }}">{{ rel.parent_table }}</a></td>
+                    <td>{{ rel.parent_column }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+{% endblock %}

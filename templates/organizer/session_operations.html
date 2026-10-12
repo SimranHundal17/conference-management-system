@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% set title = "Session Operations" %}
+{% block content %}
+<div class="row g-3 mb-4">
+    <div class="col-lg-6">
+        <section class="form-panel h-100">
+            <div class="section-heading"><h2>Assign Speaker</h2></div>
+            <form method="post" class="row g-3">
+                <input type="hidden" name="action" value="assign_speaker">
+                <div class="col-md-5">
+                    <label class="form-label">Session</label>
+                    <select class="form-select" name="session_id" required>
+                        {% for session in sessions %}
+                            <option value="{{ session.session_id }}">{{ session.label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Speaker</label>
+                    <select class="form-select" name="speaker_id" required>
+                        {% for speaker in speakers %}
+                            <option value="{{ speaker.speaker_id }}">{{ speaker.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Role</label>
+                    <input class="form-control" name="speaker_role" maxlength="50">
+                </div>
+                <div class="col-12">
+                    <button class="btn btn-primary" type="submit">Assign Speaker</button>
+                </div>
+            </form>
+        </section>
+    </div>
+    <div class="col-lg-6">
+        <section class="form-panel h-100">
+            <div class="section-heading"><h2>Room Booking</h2></div>
+            <form method="post" class="row g-3">
+                <input type="hidden" name="action" value="add_booking">
+                <div class="col-md-6">
+                    <label class="form-label">Session</label>
+                    <select class="form-select" name="session_id" required>
+                        {% for session in sessions %}
+                            <option value="{{ session.session_id }}">{{ session.label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Room</label>
+                    <select class="form-select" name="room_id" required>
+                        {% for room in rooms %}
+                            <option value="{{ room.room_id }}">{{ room.room_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Date</label>
+                    <input class="form-control" name="booking_date" type="date" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Start</label>
+                    <input class="form-control" name="booking_start_time" type="time" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">End</label>
+                    <input class="form-control" name="booking_end_time" type="time" required>
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Purpose</label>
+                    <input class="form-control" name="booking_purpose" maxlength="255">
+                </div>
+                <div class="col-12">
+                    <button class="btn btn-primary" type="submit">Create Booking</button>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
+<div class="row g-3 mb-4">
+    <div class="col-lg-6">
+        <section class="form-panel h-100">
+            <div class="section-heading"><h2>Session Material</h2></div>
+            <form method="post" class="row g-3">
+                <input type="hidden" name="action" value="add_material">
+                <div class="col-md-5">
+                    <label class="form-label">Session</label>
+                    <select class="form-select" name="session_id" required>
+                        {% for session in sessions %}
+                            <option value="{{ session.session_id }}">{{ session.label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">File Name</label>
+                    <input class="form-control" name="file_name" maxlength="255" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">File Path</label>
+                    <input class="form-control" name="file_path" maxlength="255" required>
+                </div>
+                <div class="col-12">
+                    <button class="btn btn-primary" type="submit">Add Material</button>
+                </div>
+            </form>
+        </section>
+    </div>
+    <div class="col-lg-6">
+        <section class="form-panel h-100">
+            <div class="section-heading"><h2>Session Resource</h2></div>
+            <form method="post" class="row g-3">
+                <input type="hidden" name="action" value="add_resource">
+                <div class="col-md-4">
+                    <label class="form-label">Session</label>
+                    <select class="form-select" name="session_id" required>
+                        {% for session in sessions %}
+                            <option value="{{ session.session_id }}">{{ session.label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Title</label>
+                    <input class="form-control" name="resource_title" maxlength="150" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Type</label>
+                    <select class="form-select" name="resource_type" required>
+                        <option>PDF</option>
+                        <option>Video</option>
+                        <option>GitHub</option>
+                        <option>Website</option>
+                        <option>Documentation</option>
+                    </select>
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Link</label>
+                    <input class="form-control" name="resource_link" type="url" maxlength="255" required>
+                </div>
+                <div class="col-12">
+                    <button class="btn btn-primary" type="submit">Add Resource</button>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
+<section class="form-panel mb-4">
+    <div class="section-heading"><h2>Event Announcement</h2></div>
+    <form method="post" class="row g-3">
+        <input type="hidden" name="action" value="add_announcement">
+        <div class="col-md-4">
+            <label class="form-label">Event</label>
+            <select class="form-select" name="event_id" required>
+                {% for event in events %}
+                    <option value="{{ event.event_id }}">{{ event.event_title }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Title</label>
+            <input class="form-control" name="title" maxlength="100" required>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Message</label>
+            <input class="form-control" name="message" required>
+        </div>
+        <div class="col-12">
+            <button class="btn btn-primary" type="submit">Post Announcement</button>
+        </div>
+    </form>
+</section>
+
+{% for heading, table_rows in [
+    ("Speaker Assignments", rows.assignments),
+    ("Room Bookings", rows.bookings),
+    ("Session Materials", rows.materials),
+    ("Session Resources", rows.resources),
+    ("Event Announcements", rows.announcements)
+] %}
+<section class="data-panel mb-4">
+    <div class="section-heading"><h2>{{ heading }}</h2></div>
+    {% with rows=table_rows %}
+        {% include "_mini_table.html" %}
+    {% endwith %}
+</section>
+{% endfor %}
+{% endblock %}

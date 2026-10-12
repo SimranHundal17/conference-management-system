@@ -1,0 +1,14 @@
+{% extends "dashboard.html" %}
+{% set title = "Admin Dashboard" %}
+{% block dashboard_body %}
+<section class="quick-grid mt-4">
+    <a href="{{ url_for('admin.reports', name='registrations') }}"><i class="bi bi-bar-chart"></i> Registration Summary</a>
+    <a href="{{ url_for('admin.user_accounts') }}"><i class="bi bi-person-plus"></i> Create User Account</a>
+    <a href="{{ url_for('admin.speakers') }}"><i class="bi bi-mic"></i> Manage Speakers</a>
+    <a href="{{ url_for('admin.reports', name='revenue') }}"><i class="bi bi-cash-coin"></i> Revenue Summary</a>
+    <a href="{{ url_for('admin.reports', name='feedback') }}"><i class="bi bi-star"></i> Feedback Summary</a>
+    <a href="{{ url_for('admin.certificates') }}"><i class="bi bi-award"></i> Generate Certificates</a>
+    <a href="{{ url_for('admin.database_features') }}"><i class="bi bi-sliders"></i> Database Features</a>
+    <a href="{{ url_for('admin.schema') }}"><i class="bi bi-diagram-3"></i> Schema Explorer</a>
+</section>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="form-panel">
+    <form method="post" class="row g-3">
+        <div class="col-md-8">
+            <label class="form-label">Event title</label>
+            <input class="form-control" name="event_title" value="{{ event.event_title if event else '' }}" required>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Status</label>
+            <select class="form-select" name="status_id" required>
+                {% for status in statuses %}
+                <option value="{{ status.status_id }}" {% if event and event.status_id == status.status_id %}selected{% endif %}>{{ status.status_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Category</label>
+            <select class="form-select" name="category_id" required>
+                {% for category in categories %}
+                <option value="{{ category.category_id }}" {% if event and event.category_id == category.category_id %}selected{% endif %}>{{ category.category_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Venue</label>
+            <select class="form-select" name="venue_id" required>
+                {% for venue in venues %}
+                <option value="{{ venue.venue_id }}" {% if event and event.venue_id == venue.venue_id %}selected{% endif %}>{{ venue.venue_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Start date</label>
+            <input class="form-control" type="date" name="start_date" value="{{ event.start_date if event else '' }}" required>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">End date</label>
+            <input class="form-control" type="date" name="end_date" value="{{ event.end_date if event else '' }}" required>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Registration deadline</label>
+            <input class="form-control" type="date" name="registration_deadline" value="{{ event.registration_deadline if event else '' }}">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Capacity</label>
+            <input class="form-control" type="number" min="1" name="max_capacity" value="{{ event.max_capacity if event else '' }}" required>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Registration fee</label>
+            <input class="form-control" type="number" min="0" step="0.01" name="registration_fee" value="{{ event.registration_fee if event else '0.00' }}">
+        </div>
+        <div class="col-12">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" name="description" rows="5">{{ event.description if event else '' }}</textarea>
+        </div>
+        <div class="col-12 d-flex gap-2">
+            <button class="btn btn-primary" type="submit">Save Event</button>
+            <a class="btn btn-outline-secondary" href="{{ url_for('organizer.events') }}">Cancel</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

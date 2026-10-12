@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="data-panel mb-4">
+    <div class="section-heading">
+        <div>
+            <h2>{{ item.name }}</h2>
+            <p class="schema-note">{{ note }}</p>
+        </div>
+        <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('admin.schema') }}">
+            <i class="bi bi-arrow-left"></i> Schema
+        </a>
+    </div>
+    <div class="schema-meta">
+        <span>{{ item.object_type.replace("BASE TABLE", "Table")|title }}</span>
+        <span>{{ item.estimated_rows if item.estimated_rows is not none else "View" }} estimated rows</span>
+    </div>
+</section>
+
+<section class="schema-layout">
+    <div class="data-panel">
+        <div class="section-heading">
+            <h2>Columns</h2>
+        </div>
+        <div class="table-responsive">
+            <table class="table align-middle data-table">
+                <thead>
+                <tr>
+                    <th>Column</th>
+                    <th>Type</th>
+                    <th>Nullable</th>
+                    <th>Key</th>
+                    <th>Extra</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for column in columns %}
+                <tr>
+                    <td>{{ column.column_name }}</td>
+                    <td>{{ column.column_type }}</td>
+                    <td>{{ column.is_nullable }}</td>
+                    <td>{{ column.column_key or "-" }}</td>
+                    <td>{{ column.extra or "-" }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="data-panel">
+        <div class="section-heading">
+            <h2>Relationships</h2>
+        </div>
+        <h3 class="schema-subhead">This table references</h3>
+        {% if foreign_keys %}
+            <ul class="relationship-list">
+                {% for fk in foreign_keys %}
+                <li>
+                    <strong>{{ fk.column_name }}</strong>
+                    points to
+                    <a href="{{ url_for('admin.schema_object', name=fk.referenced_table) }}">{{ fk.referenced_table }}</a>.{{ fk.referenced_column }}
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="schema-note">No outgoing foreign keys.</p>
+        {% endif %}
+
+        <h3 class="schema-subhead">Other tables reference this</h3>
+        {% if referenced_by %}
+            <ul class="relationship-list">
+                {% for ref in referenced_by %}
+                <li>
+                    <a href="{{ url_for('admin.schema_object', name=ref.table_name) }}">{{ ref.table_name }}</a>.{{ ref.column_name }}
+                    points to <strong>{{ ref.referenced_column }}</strong>
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="schema-note">No incoming foreign keys.</p>
+        {% endif %}
+    </div>
+</section>
+
+{% include "_data_table.html" %}
+{% endblock %}

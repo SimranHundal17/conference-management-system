@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% set title = "Payments" %}
+{% block content %}
+<div class="row g-3 mb-4">
+    <div class="col-lg-6">
+        <section class="form-panel h-100">
+            <div class="section-heading"><h2>Create Payment</h2></div>
+            <form method="post" action="{{ url_for('admin.payment_operations') }}" class="row g-3">
+                <input type="hidden" name="action" value="create_payment">
+                <div class="col-md-6">
+                    <label class="form-label">Registration</label>
+                    <select class="form-select" name="registration_id" required>
+                        {% for registration in registrations %}
+                            <option value="{{ registration.registration_id }}">{{ registration.label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Method</label>
+                    <select class="form-select" name="payment_method_id" required>
+                        {% for method in methods %}
+                            <option value="{{ method.payment_method_id }}">{{ method.method_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Amount</label>
+                    <input class="form-control" name="amount" type="number" min="0" step="0.01" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Status</label>
+                    <select class="form-select" name="payment_status">
+                        <option>Pending</option>
+                        <option>Completed</option>
+                        <option>Failed</option>
+                        <option>Refunded</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Reference</label>
+                    <input class="form-control" name="transaction_reference" maxlength="100">
+                </div>
+                <div class="col-12">
+                    <button class="btn btn-primary" type="submit"><i class="bi bi-plus-lg"></i> Create Payment</button>
+                </div>
+            </form>
+        </section>
+    </div>
+    <div class="col-lg-6">
+        <section class="form-panel h-100">
+            <div class="section-heading"><h2>Update Or Refund</h2></div>
+            <form method="post" action="{{ url_for('admin.payment_operations') }}" class="row g-3 mb-3">
+                <input type="hidden" name="action" value="update_payment">
+                <div class="col-md-7">
+                    <label class="form-label">Payment</label>
+                    <select class="form-select" name="payment_id" required>
+                        {% for payment in rows %}
+                            <option value="{{ payment.payment_id }}">#{{ payment.payment_id }} - {{ payment.student_name }} - {{ payment.amount }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-5">
+                    <label class="form-label">Status</label>
+                    <select class="form-select" name="payment_status">
+                        <option>Pending</option>
+                        <option>Completed</option>
+                        <option>Failed</option>
+                        <option>Refunded</option>
+                    </select>
+                </div>
+                <div class="col-12">
+                    <button class="btn btn-outline-primary" type="submit"><i class="bi bi-pencil"></i> Update Status</button>
+                </div>
+            </form>
+            <form method="post" action="{{ url_for('admin.payment_operations') }}" class="row g-3">
+                <input type="hidden" name="action" value="create_refund">
+                <div class="col-md-6">
+                    <label class="form-label">Payment</label>
+                    <select class="form-select" name="payment_id" required>
+                        {% for payment in rows %}
+                            <option value="{{ payment.payment_id }}">#{{ payment.payment_id }} - {{ payment.student_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Refund Amount</label>
+                    <input class="form-control" name="refund_amount" type="number" min="0" step="0.01" required>
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Refund Reason</label>
+                    <input class="form-control" name="refund_reason">
+                </div>
+                <div class="col-12">
+                    <button class="btn btn-outline-danger" type="submit"><i class="bi bi-arrow-counterclockwise"></i> Create Refund</button>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
+{% set show_toolbar = true %}
+{% include "_data_table.html" %}
+<section class="data-panel mt-4">
+    <div class="section-heading"><h2>Refund Records</h2></div>
+    {% with rows=refunds %}
+        {% include "_mini_table.html" %}
+    {% endwith %}
+</section>
+{% endblock %}

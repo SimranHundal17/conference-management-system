@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% set title = "Feedback" %}
+{% block content %}
+<div class="row g-3 mb-4">
+    <div class="col-lg-6">
+        <section class="form-panel h-100">
+            <div class="section-heading"><h2>Event Feedback</h2></div>
+            {% if events %}
+            <form method="post" class="row g-3">
+                <input type="hidden" name="action" value="event_feedback">
+                <div class="col-md-6">
+                    <label class="form-label">Event</label>
+                    <select class="form-select" name="event_id" required>
+                        {% for event in events %}
+                            <option value="{{ event.event_id }}">{{ event.event_title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Type</label>
+                    <select class="form-select" name="feedback_type_id" required>
+                        {% for type in types %}
+                            <option value="{{ type.feedback_type_id }}">{{ type.type_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Rating</label>
+                    <input class="form-control" name="rating" type="number" min="0" max="5" step="0.5" required>
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Comments</label>
+                    <textarea class="form-control" name="comments" rows="3"></textarea>
+                </div>
+                <div class="col-12">
+                    <button class="btn btn-primary" type="submit">Submit Event Feedback</button>
+                </div>
+            </form>
+            {% else %}
+                <div class="empty-state"><i class="bi bi-clock-history"></i><p>No completed registered events are available for feedback.</p></div>
+            {% endif %}
+        </section>
+    </div>
+    <div class="col-lg-6">
+        <section class="form-panel h-100">
+            <div class="section-heading"><h2>Session Feedback</h2></div>
+            {% if sessions %}
+            <form method="post" class="row g-3">
+                <input type="hidden" name="action" value="session_feedback">
+                <div class="col-md-8">
+                    <label class="form-label">Session</label>
+                    <select class="form-select" name="session_id" required>
+                        {% for session in sessions %}
+                            <option value="{{ session.session_id }}">{{ session.label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Rating</label>
+                    <input class="form-control" name="rating" type="number" min="0" max="5" step="0.5" required>
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Comments</label>
+                    <textarea class="form-control" name="comments" rows="3"></textarea>
+                </div>
+                <div class="col-12">
+                    <button class="btn btn-primary" type="submit">Submit Session Feedback</button>
+                </div>
+            </form>
+            {% else %}
+                <div class="empty-state"><i class="bi bi-clock-history"></i><p>No completed sessions are available for feedback.</p></div>
+            {% endif %}
+        </section>
+    </div>
+</div>
+<div class="row g-3">
+    <div class="col-lg-6">
+        <section class="data-panel">
+            <div class="section-heading"><h2>My Event Feedback</h2></div>
+            {% if event_rows %}
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead>
+                    <tr><th>Event</th><th>Type</th><th>Rating</th><th>Comments</th><th>Submitted</th><th></th></tr>
+                    </thead>
+                    <tbody>
+                    {% for row in event_rows %}
+                    <tr>
+                        <td>{{ row.event_title }}</td>
+                        <td>{{ row.type_name }}</td>
+                        <td>{{ row.rating }}</td>
+                        <td>{{ row.comments or "-" }}</td>
+                        <td>{{ row.submitted_at }}</td>
+                        <td class="text-end">
+                            <form method="post" action="{{ url_for('student.delete_event_feedback', feedback_id=row.feedback_id) }}" data-confirm="Delete this feedback?">
+                                <button class="btn btn-outline-danger btn-sm" type="submit"><i class="bi bi-trash"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+                <div class="empty-state"><i class="bi bi-inbox"></i><p>No event feedback found.</p></div>
+            {% endif %}
+        </section>
+    </div>
+    <div class="col-lg-6">
+        <section class="data-panel">
+            <div class="section-heading"><h2>My Session Feedback</h2></div>
+            {% if session_rows %}
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead>
+                    <tr><th>Session</th><th>Rating</th><th>Comments</th><th>Submitted</th><th></th></tr>
+                    </thead>
+                    <tbody>
+                    {% for row in session_rows %}
+                    <tr>
+                        <td>{{ row.title }}</td>
+                        <td>{{ row.rating }}</td>
+                        <td>{{ row.comments or "-" }}</td>
+                        <td>{{ row.submitted_at }}</td>
+                        <td class="text-end">
+                            <form method="post" action="{{ url_for('student.delete_session_feedback', session_feedback_id=row.session_feedback_id) }}" data-confirm="Delete this session feedback?">
+                                <button class="btn btn-outline-danger btn-sm" type="submit"><i class="bi bi-trash"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+                <div class="empty-state"><i class="bi bi-inbox"></i><p>No session feedback found.</p></div>
+            {% endif %}
+        </section>
+    </div>
+</div>
+{% endblock %}

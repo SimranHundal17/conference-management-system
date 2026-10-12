@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% set title = "Speakers" %}
+{% block content %}
+<section class="form-panel mb-4">
+    <form method="post" class="row g-3" action="{{ url_for('admin.edit_speaker', speaker_id=speaker.speaker_id) if speaker else url_for('admin.speakers') }}">
+        <div class="col-md-3">
+            <label class="form-label">First Name</label>
+            <input class="form-control" name="first_name" maxlength="50" value="{{ speaker.first_name if speaker else '' }}" required>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Last Name</label>
+            <input class="form-control" name="last_name" maxlength="50" value="{{ speaker.last_name if speaker else '' }}" required>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Email</label>
+            <input class="form-control" name="email" type="email" maxlength="255" value="{{ speaker.email if speaker else '' }}" required>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Organization</label>
+            <input class="form-control" name="organization_name" maxlength="100" value="{{ speaker.organization_name if speaker else '' }}">
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Specialization</label>
+            <input class="form-control" name="specialization" maxlength="100" value="{{ speaker.specialization if speaker else '' }}">
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">LinkedIn URL</label>
+            <input class="form-control" name="linkedin_url" maxlength="255" value="{{ speaker.linkedin_url if speaker else '' }}">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Biography</label>
+            <input class="form-control" name="biography" value="{{ speaker.biography if speaker else '' }}">
+        </div>
+        <div class="col-12">
+            <button class="btn btn-primary" type="submit">
+                <i class="bi bi-save"></i> {{ "Update Speaker" if speaker else "Create Speaker" }}
+            </button>
+            {% if speaker %}
+                <a class="btn btn-outline-secondary" href="{{ url_for('admin.speakers') }}">Cancel</a>
+            {% endif %}
+        </div>
+    </form>
+</section>
+<section class="data-panel">
+    {% if rows %}
+    <div class="table-responsive">
+        <table class="table align-middle data-table">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Organization</th>
+                <th>Specialization</th>
+                <th>LinkedIn</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for row in rows %}
+            <tr>
+                <td>{{ row.first_name }} {{ row.last_name }}</td>
+                <td>{{ row.email }}</td>
+                <td>{{ row.organization_name or "-" }}</td>
+                <td>{{ row.specialization or "-" }}</td>
+                <td>{{ row.linkedin_url or "-" }}</td>
+                <td class="text-end">
+                    <a class="btn btn-outline-primary btn-sm" href="{{ url_for('admin.edit_speaker', speaker_id=row.speaker_id) }}"><i class="bi bi-pencil"></i></a>
+                    <form class="d-inline" method="post" action="{{ url_for('admin.delete_speaker', speaker_id=row.speaker_id) }}" data-confirm="Delete this speaker?">
+                        <button class="btn btn-outline-danger btn-sm" type="submit"><i class="bi bi-trash"></i></button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <div class="empty-state"><i class="bi bi-inbox"></i><p>No records found.</p></div>
+    {% endif %}
+</section>
+{% endblock %}

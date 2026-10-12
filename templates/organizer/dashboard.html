@@ -1,0 +1,12 @@
+{% extends "dashboard.html" %}
+{% set title = "Organizer Dashboard" %}
+{% block dashboard_body %}
+<section class="data-panel mt-4">
+    <div class="section-heading">
+        <h2>Managed Events</h2>
+        <a class="btn btn-primary btn-sm" href="{{ url_for('organizer.create_event') }}"><i class="bi bi-plus-lg"></i> New Event</a>
+    </div>
+    {% set rows = events %}
+    {% include "_mini_table.html" %}
+</section>
+{% endblock %}

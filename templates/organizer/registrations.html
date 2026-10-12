@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% set title = "Event Registrations" %}
+{% block content %}
+<section class="toolbar">
+    <div class="input-group table-search">
+        <span class="input-group-text"><i class="bi bi-search"></i></span>
+        <input class="form-control" data-table-search placeholder="Search registrations">
+    </div>
+</section>
+<section class="data-panel">
+    <div class="table-responsive">
+        <table class="table align-middle data-table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Event</th>
+                <th>Student</th>
+                <th>Email</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for row in rows %}
+            <tr>
+                <td>{{ row.registration_id }}</td>
+                <td>{{ row.event_title }}</td>
+                <td>{{ row.first_name }} {{ row.last_name }}</td>
+                <td>{{ row.email }}</td>
+                <td>{{ row.registration_date }}</td>
+                <td>{{ row.status_name }}</td>
+                <td>
+                    <form method="post" action="{{ url_for('organizer.update_registration_status', registration_id=row.registration_id) }}" class="d-flex gap-2">
+                        <select class="form-select form-select-sm" name="status_id">
+                            {% for status in statuses %}
+                                <option value="{{ status.status_id }}" {% if status.status_name == row.status_name %}selected{% endif %}>{{ status.status_name }}</option>
+                            {% endfor %}
+                        </select>
+                        <button class="btn btn-outline-primary btn-sm" type="submit">Update</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

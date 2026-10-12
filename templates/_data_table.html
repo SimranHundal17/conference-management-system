@@ -1,0 +1,45 @@
+{% set table_rows = rows %}
+{% if show_toolbar is not defined or show_toolbar %}
+<section class="toolbar">
+    <div class="input-group table-search">
+        <span class="input-group-text"><i class="bi bi-search"></i></span>
+        <input class="form-control" data-table-search placeholder="Search table">
+    </div>
+</section>
+{% endif %}
+<section class="data-panel">
+    {% if table_rows %}
+    <div class="table-responsive">
+        <table class="table align-middle data-table">
+            <thead>
+            <tr>
+                {% for column in table_rows[0].keys() %}
+                    <th>{{ column.replace("_", " ")|title }}</th>
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for row in table_rows %}
+                <tr>
+                    {% for value in row.values() %}
+                        <td>{{ value if value is not none else "-" }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="table-footer">
+        <span data-table-count></span>
+        <div class="btn-group">
+            <button class="btn btn-outline-secondary btn-sm" data-page-prev><i class="bi bi-chevron-left"></i></button>
+            <button class="btn btn-outline-secondary btn-sm" data-page-next><i class="bi bi-chevron-right"></i></button>
+        </div>
+    </div>
+    {% else %}
+        <div class="empty-state">
+            <i class="bi bi-inbox"></i>
+            <p>No records found.</p>
+        </div>
+    {% endif %}
+</section>

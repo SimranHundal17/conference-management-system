@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% set title = "Database Features" %}
+{% block content %}
+<div class="schema-layout">
+    <section class="data-panel">
+        <div class="section-heading"><h2>Views Used For Reports</h2></div>
+        {% with rows=views %}
+            {% include "_mini_table.html" %}
+        {% endwith %}
+    </section>
+    <section class="data-panel">
+        <div class="section-heading"><h2>Stored Procedures</h2></div>
+        {% with rows=procedures %}
+            {% include "_mini_table.html" %}
+        {% endwith %}
+    </section>
+    <section class="data-panel">
+        <div class="section-heading"><h2>Triggers</h2></div>
+        {% with rows=triggers %}
+            {% include "_mini_table.html" %}
+        {% endwith %}
+    </section>
+    <section class="data-panel">
+        <div class="section-heading"><h2>SQL Roles From Script</h2></div>
+        {% with rows=grants %}
+            {% include "_mini_table.html" %}
+        {% endwith %}
+    </section>
+    <section class="data-panel">
+        <div class="section-heading"><h2>Indexes</h2></div>
+        {% with rows=indexes %}
+            {% include "_mini_table.html" %}
+        {% endwith %}
+    </section>
+</div>
+{% endblock %}
